@@ -17,6 +17,8 @@ Additional product to cart is a WooCommerce addons that gives the opportunity to
 * Add Simple product, variable product or variation as product option
 * Compatible with simple product and variable product
 
+[Fork and download on GitHub](https://github.com/Agence-Highfive/WooCommerce-additional-product)
+
 == Installation ==
 
 This section describes how to install the plugin and get it working.
@@ -40,7 +42,7 @@ You can add simple product, selectable with a checkbox, variable product, select
 
 = Is there any other option available? =
 
-THere is no other option for the moment, but just leave us a message if you need a special feature. In case of advanced development needs, we can develop that for you by quotation.
+There is no other option for the moment, but just leave us a message if you need a special feature. In case of advanced development needs, we can develop that for you by quotation.
 
 == Screenshots ==
 1. /assets/screenshot-01.png
