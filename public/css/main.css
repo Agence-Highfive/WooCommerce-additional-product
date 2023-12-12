@@ -1,0 +1,27 @@
+.h5_presentation_produit{
+    margin-bottom:10px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.h5_product_block{
+    display: flex;
+    align-items: center;
+    padding:10px 0px;
+    gap:5px;
+}
+.h5_select_container{
+    margin: 10px 0;
+}
+.variations_form select, .h5_block_additionnal_product select {
+        padding:10px;
+}
+
+.h5_product_block label{
+    margin:0;
+}
+.h5_block_additionnal_product {
+    margin-bottom: 20px;
+}
+.h5_add_product_name{
+    margin-bottom:5px;
+}
