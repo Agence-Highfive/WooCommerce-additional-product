@@ -35,6 +35,10 @@ e.g.
 
 No, it is not. It is only compatible with simple products and variable products.
 
+= What do I need to use the plugin? =
+
+You need to install WooCommerce on your WordPress site to use that plugin.
+
 = What type of product can be added as option? =
 
 You can add simple product, selectable with a checkbox, variable product, selectable with a select list, and variation, selectable with a checkbox. Other kind of product won't be displayed on the product page.
