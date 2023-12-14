@@ -1,6 +1,5 @@
-=== Plugin Name ===
-Contributors: 
-Donate link: https://www.highfive.fr/
+=== H5 Additional Product to Cart ===
+Contributors: ceccah5,fredhighfive
 Tags: woocommerce, e-commerce, product option, ecommerce, woocommerce product
 Requires at least: 5
 Tested up to: 6.4.2

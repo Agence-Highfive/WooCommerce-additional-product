@@ -174,18 +174,26 @@ class H5_Additional_Product_Admin {
 	public function h5_additional_fields_save( $post_id ){
 	
 		// // Text Field présentation
-		$woocommerce_text_field = $_POST['h5_additional_product_presentation_field'];
-		if( !empty( $woocommerce_text_field ) ){
-			update_post_meta( $post_id, 'h5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
+		if(isset($_POST['h5_additional_product_presentation_field'])){
+			$woocommerce_text_field = sanitize_text_field($_POST['h5_additional_product_presentation_field']);
+			if( !empty( $woocommerce_text_field ) ){
+				update_post_meta( $post_id, 'h5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
+			}
 		}
-			
-		// // Checkbox display proce option
-		$price_checkbox = isset( $_POST['_h5_checkbox_price_product'] ) ? 'yes' : 'no';
-		update_post_meta( $post_id, '_h5_checkbox_price_product', $price_checkbox );
+
+		// // Checkbox display price option
+		if(isset($_POST['_h5_checkbox_price_product']))	{
+			$price_checkbox = isset( $_POST['_h5_checkbox_price_product'] ) ? 'yes' : 'no';
+			update_post_meta( $post_id, '_h5_checkbox_price_product', $price_checkbox );
+		}
+		
 			
 		// Product Field Type
-		$product_field_type =  $_POST['related_ids'];
-		update_post_meta( $post_id, 'related_ids', $product_field_type );
+		if(isset($_POST['related_ids']) && is_array($_POST['related_ids'])){
+			$product_field_type = $_POST['related_ids'];
+			update_post_meta( $post_id, 'related_ids', $product_field_type );
+		}
+		
 	}
 	
 
