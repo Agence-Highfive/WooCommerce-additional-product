@@ -83,17 +83,7 @@ function run_high5_additional_product() {
 run_high5_additional_product();
 
 
-/** ADMIN
- * 
- * Admin part of the plugin
- * 
- */
-function debug($datas)
-{
-    echo '<pre style="background:black;color:white;text-align:left">';
-      print_r($datas);
-    echo '</pre>';
-}
+
 
 /**
  * Add a tab to the WooCommerce product parameters
