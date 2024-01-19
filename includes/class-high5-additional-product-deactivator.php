@@ -6,8 +6,8 @@
  * @link       https://www.highfive.fr
  * @since      1.0.0
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/includes
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/includes
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/includes
  * @author     Highfive <contact@highfive.fr>
  */
-class H5_Additional_Product_Deactivator {
+class high5_Additional_Product_Deactivator {
 
 	/**
 	 * Short Description. (use period)

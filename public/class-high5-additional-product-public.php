@@ -6,8 +6,8 @@
  * @link       https://www.highfive.fr
  * @since      1.0.0
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/public
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/public
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/public
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/public
  * @author     Highfive <contact@highfive.fr>
  */
-class H5_Additional_Product_Public {
+class high5_Additional_Product_Public {
 
 	/**
 	 * The ID of this plugin.
@@ -77,42 +77,55 @@ class H5_Additional_Product_Public {
 	 * @since    1.0.0
 	 */
 
-	public function h5_display_additional_product_to_cart(){
+	public function high5_display_additional_product_to_cart(){
     
 		if(is_product()){    
 		global $product;
 
 		$additional_products = get_post_meta( $product->get_id(), 'related_ids', false )[0];
-		$presentation_products = get_post_meta( $product->get_id(), 'h5_additional_product_presentation_field', false )[0];
-		$checkbox_price_products = (get_post_meta( $product->get_id(), '_h5_checkbox_price_product', false )[0] == 'yes') ? true : false;
+		$presentation_products = get_post_meta( $product->get_id(), 'high5_additional_product_presentation_field', false )[0];
+		$checkbox_price_products = (get_post_meta( $product->get_id(), '_high5_checkbox_price_product', false )[0] == 'yes') ? true : false;
 
 		if(is_array($additional_products)){
-			echo '<div class="h5_block_additionnal_product">';
-			echo '<div class="h5_presentation_produit">'.$presentation_products.'</div>';
+			echo '<div class="high5_block_additionnal_product">';
+			echo '<div class="high5_presentation_produit">'.$presentation_products.'</div>';
 			$count = 0;
 			foreach($additional_products as $additional_product_id){
 				$add_product = wc_get_product( $additional_product_id );
 				$add_product_data = $add_product->get_data();
 				//Whether the product is simple or is a variation
 				if($add_product->get_type() == "simple" || $add_product->get_type() == "variation"): ?>
-				<div class="h5_product_block">
+				<div class="high5_product_block">
 					<?php $attributes = $add_product->get_data()['attributes'] ?>
-					<input type="checkbox" id="produit_<?php echo $count ?>" name="h5_produits[]" value="<?php echo $additional_product_id  ?>">
-					<label for="produit_<?php echo $count ?>"><?php echo $add_product->get_name() ?> <?php foreach ($attributes as $key => $attr): echo str_replace('-', ' ', $attr). ' '; endforeach ?> <?php if($checkbox_price_products): ?> (+ <?php echo $add_product->get_price_html() ?>)<?php endif ?></label><br>
+					<input type="checkbox" id="produit_<?php echo esc_attr($count) ?>" name="high5_produits[]" value="<?php echo esc_attr($additional_product_id)  ?>">
+					<label for="produit_<?php echo esc_attr($count) ?>"><?php echo esc_html($add_product->get_name()) ?> <?php foreach ($attributes as $key => $attr): echo str_replace('-', ' ', $attr). ' '; endforeach ?> <?php if($checkbox_price_products): ?> (+ <?php echo $add_product->get_price_html() ?>)<?php endif ?></label><br>
 				</div>
 				<?php elseif ($add_product->get_type() == "variable"): ?>
-				   <?php 
-						
+				   <?php
 						$variations_add = $add_product->get_available_variations();
 					?>
-					<div class="h5_select_container">
-						<div class="h5_add_product_name"><?php echo $add_product->get_name(); ?></div>
-						<select name="h5_produits[]" class="">
+					<div class="high5_select_container">
+						<div class="high5_add_product_name"><?php echo esc_html($add_product->get_name()); ?></div>
+						
+						<select name="high5_produits[]" class="" data-attribute="">
 							<option value=""><?php _e('Choose an option', 'woocommerce') ?></option>
 							<?php foreach($variations_add as $add_variation): ?>
 								<?php $add_product = wc_get_product($add_variation['variation_id']) ?>
 								<?php $attributes = $add_product->get_data()['attributes'] ?>
-								<option value="<?php echo $add_variation['variation_id'] ?>"><?php foreach ($attributes as $key => $attr): echo str_replace('-', ' ', $attr). ' '; endforeach ?> <?php if($checkbox_price_products): ?> (+ <?php echo $add_product->get_price_html()?>)<?php endif ?></option>
+								
+								<option data-attributes="<?php foreach(array_keys($add_variation['attributes']) as $dataAttrib) {
+									 echo esc_attr($dataAttrib);
+									 }   ?>" value="<?php echo esc_attr($add_variation['variation_id']) ?>">
+									 <?php $countAttrib = 1; ?>
+									 <?php foreach ($attributes as $key => $attr): 
+											echo esc_html(str_replace('-', ' ', $attr));
+											if($countAttrib == count($attributes)):
+											echo ' ';
+											else:
+												echo ' - ';
+											endif;
+											$countAttrib++;
+										endforeach ?> <?php if($checkbox_price_products): ?> (+ <?php echo wp_kses_post($add_product->get_price_html()) ?>)<?php endif ?></option>
 							<?php endforeach ?>
 							
 						</select>
@@ -133,16 +146,16 @@ class H5_Additional_Product_Public {
 	 * @since    1.0.0
 	 */
 
-	public function h5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data) {
+	public function high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data) {
 
 		
 		$product = wc_get_product($variation);
 		
-		if(array_key_exists('h5_produits', $_POST)){
-			$tableau_prod = $_POST['h5_produits'];
-			unset($_POST['h5_produits']);
+		if(array_key_exists('high5_produits', $_POST)){
+			$tableau_prod = array_map( 'absint', (array) $_POST['high5_produits'] ) ;
+			unset($_POST['high5_produits']);
 			foreach( $tableau_prod as $add_prod_id){
-				$product = wc_get_product($add_prod_id);
+				$product = wc_get_product(absint($add_prod_id));
 
 				if($product){
 					if($product->get_type() == 'simple'){

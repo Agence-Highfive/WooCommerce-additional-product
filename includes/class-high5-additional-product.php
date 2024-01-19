@@ -9,8 +9,8 @@
  * @link       https://www.highfive.fr
  * @since      1.0.0
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/includes
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/includes
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/includes
  * @author     Highfive <contact@highfive.fr>
  */
-class H5_Additional_Product {
+class high5_Additional_Product {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class H5_Additional_Product {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      H5_Additional_Product_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      high5_Additional_Product_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -67,8 +67,8 @@ class H5_Additional_Product {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'H5_ADDITIONAL_PRODUCT_VERSION' ) ) {
-			$this->version = H5_ADDITIONAL_PRODUCT_VERSION;
+		if ( defined( 'high5_ADDITIONAL_PRODUCT_VERSION' ) ) {
+			$this->version = high5_ADDITIONAL_PRODUCT_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -86,10 +86,10 @@ class H5_Additional_Product {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - H5_Additional_Product_Loader. Orchestrates the hooks of the plugin.
-	 * - H5_Additional_Product_i18n. Defines internationalization functionality.
-	 * - H5_Additional_Product_Admin. Defines all hooks for the admin area.
-	 * - H5_Additional_Product_Public. Defines all hooks for the public side of the site.
+	 * - high5_Additional_Product_Loader. Orchestrates the hooks of the plugin.
+	 * - high5_Additional_Product_i18n. Defines internationalization functionality.
+	 * - high5_Additional_Product_Admin. Defines all hooks for the admin area.
+	 * - high5_Additional_Product_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,33 +103,33 @@ class H5_Additional_Product {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-h5-additional-product-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-high5-additional-product-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-h5-additional-product-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-high5-additional-product-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-h5-additional-product-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-high5-additional-product-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-h5-additional-product-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-high5-additional-product-public.php';
 
-		$this->loader = new H5_Additional_Product_Loader();
+		$this->loader = new high5_Additional_Product_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the H5_Additional_Product_i18n class in order to set the domain and to register the hook
+	 * Uses the high5_Additional_Product_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -137,7 +137,7 @@ class H5_Additional_Product {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new H5_Additional_Product_i18n();
+		$plugin_i18n = new high5_Additional_Product_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,7 +152,7 @@ class H5_Additional_Product {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new H5_Additional_Product_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new high5_Additional_Product_Admin( $this->get_plugin_name(), $this->get_version() );
 
 	}
 
@@ -165,7 +165,7 @@ class H5_Additional_Product {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new H5_Additional_Product_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new high5_Additional_Product_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
@@ -195,7 +195,7 @@ class H5_Additional_Product {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    H5_Additional_Product_Loader    Orchestrates the hooks of the plugin.
+	 * @return    high5_Additional_Product_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;

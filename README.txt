@@ -53,9 +53,10 @@ There is no other option for the moment, but just leave us a message if you need
 3. /assets/screenshot-03.png
 4. /assets/screenshot-04.png
 5. /assets/screenshot-05.png
-6.
 
 == Changelog ==
 
+= 1.1 =
+* Sanitazing data and Escaping output
 = 1.0 =
 * First release of the plugin

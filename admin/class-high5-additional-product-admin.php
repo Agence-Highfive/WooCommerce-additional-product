@@ -6,8 +6,8 @@
  * @link       https://www.highfive.fr
  * @since      1.0.0
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/admin
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/admin
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    H5_Additional_Product
- * @subpackage H5_Additional_Product/admin
+ * @package    high5_Additional_Product
+ * @subpackage high5_Additional_Product/admin
  * @author     Highfive <contact@highfive.fr>
  */
-class H5_Additional_Product_Admin {
+class high5_Additional_Product_Admin {
 
 	/**
 	 * The ID of this plugin.
@@ -63,10 +63,10 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_additional_product_tab($tabs) {
-		$tabs['h5_additional_product_tab'] = array(
+	public function high5_additional_product_tab($tabs) {
+		$tabs['high5_additional_product_tab'] = array(
 			'label'     => __( 'Additional products', 'h5-additional-product' ), //Navigation Label Name
-			'target'    => 'h5_additional_product_content', //The HTML ID of the tab content wrapper
+			'target'    => 'high5_additional_product_content', //The HTML ID of the tab content wrapper
 			'class' => array( 'show_if_simple', 'show_if_variable' ), //Show if the product type is simple
 			'priority' => 99,
 		);
@@ -80,16 +80,16 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_add_custom_additional_fields() {
+	public function high5_add_custom_additional_fields() {
 		
-		echo '<div id="h5_additional_product_content" class="panel woocommerce_options_panel">';
+		echo '<div id="high5_additional_product_content" class="panel woocommerce_options_panel">';
 		?>
 		<div class="presentation_field">
-			<?php $this->h5_add_label_product_field() ?>
+			<?php $this->high5_add_label_product_field() ?>
 		</div>
 		<?php 
-		$this->h5_select_product_field(); 
-		$this->h5_checkbox_price_product();
+		$this->high5_select_product_field(); 
+		$this->high5_checkbox_price_product();
 		echo '</div>';
 		}
 
@@ -99,7 +99,7 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_select_product_field(){
+	public function high5_select_product_field(){
 		global $woocommerce, $post;
 		?>
 		<p class="form-field">
@@ -135,11 +135,11 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_add_label_product_field(){
+	public function high5_add_label_product_field(){
         // Custom Product Text Field
         woocommerce_wp_text_input(
             array(
-                'id'          => 'h5_additional_product_presentation_field',
+                'id'          => 'high5_additional_product_presentation_field',
                 'label'       => __( 'Title', 'h5-additional-product' ),
                 'placeholder' => 'Information regarding the product(s)',
                 'desc_tip'    => 'true'
@@ -153,12 +153,12 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_checkbox_price_product() {
+	public function high5_checkbox_price_product() {
 
 		echo '<div class="options_group">'; 
 		woocommerce_wp_checkbox( array(
-			'id'          => '_h5_checkbox_price_product',
-			'value'       => get_post_meta( get_the_ID(), '_h5_checkbox_price_product' )[0],
+			'id'          => '_high5_checkbox_price_product',
+			'value'       => get_post_meta( get_the_ID(), '_high5_checkbox_price_product' )[0],
 			'label'       => __( 'Show price', 'h5-additional-product' ),
 			'description' => __( 'Show product price after additional product name', 'h5-additional-product' ),
 		) );
@@ -171,26 +171,26 @@ class H5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function h5_additional_fields_save( $post_id ){
+	public function high5_additional_fields_save( $post_id ){
 	
 		// // Text Field présentation
-		if(isset($_POST['h5_additional_product_presentation_field'])){
-			$woocommerce_text_field = sanitize_text_field($_POST['h5_additional_product_presentation_field']);
+		if(isset($_POST['high5_additional_product_presentation_field'])){
+			$woocommerce_text_field = sanitize_text_field($_POST['high5_additional_product_presentation_field']);
 			if( !empty( $woocommerce_text_field ) ){
-				update_post_meta( $post_id, 'h5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
+				update_post_meta( $post_id, 'high5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
 			}
 		}
 
 		// // Checkbox display price option
-		if(isset($_POST['_h5_checkbox_price_product']))	{
-			$price_checkbox = isset( $_POST['_h5_checkbox_price_product'] ) ? 'yes' : 'no';
-			update_post_meta( $post_id, '_h5_checkbox_price_product', $price_checkbox );
+		if(isset($_POST['_high5_checkbox_price_product']))	{
+			$price_checkbox = isset( $_POST['_high5_checkbox_price_product'] ) ? 'yes' : 'no';
+			update_post_meta( $post_id, '_high5_checkbox_price_product', $price_checkbox );
 		}
 		
 			
 		// Product Field Type
 		if(isset($_POST['related_ids']) && is_array($_POST['related_ids'])){
-			$product_field_type = $_POST['related_ids'];
+			$product_field_type = array_map( 'absint', (array) $_POST['related_ids'] ) ;
 			update_post_meta( $post_id, 'related_ids', $product_field_type );
 		}
 		

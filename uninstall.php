@@ -22,7 +22,7 @@
  * @link       https://www.highfive.fr
  * @since      1.0.0
  *
- * @package    H5_Additional_Product
+ * @package    high5_Additional_Product
  */
 
 // If uninstall not called from WordPress, then exit.
