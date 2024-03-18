@@ -80,18 +80,18 @@ class high5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function high5_add_custom_additional_fields() {
+	public function high5_add_custom_additional_fields() { ?>
 		
-		echo '<div id="high5_additional_product_content" class="panel woocommerce_options_panel">';
-		?>
-		<div class="presentation_field">
-			<?php $this->high5_add_label_product_field() ?>
+		<div id="high5_additional_product_content" class="panel woocommerce_options_panel">
+
+			<div class="presentation_field">
+				<?php $this->high5_add_label_product_field() ?>
+			</div>
+			<?php 
+			$this->high5_select_product_field(); 
+			$this->high5_checkbox_price_product(); ?>
 		</div>
-		<?php 
-		$this->high5_select_product_field(); 
-		$this->high5_checkbox_price_product();
-		echo '</div>';
-		}
+		<?php }
 
 	/**
 	 * Select product field
@@ -103,7 +103,7 @@ class high5_Additional_Product_Admin {
 		global $woocommerce, $post;
 		?>
 		<p class="form-field">
-		<label for="related_ids"><?php _e( 'Additional product to the cart', 'h5-additional-product' ); ?></label>
+		<label for="related_ids"><?php esc_html_e( 'Additional product to the cart', 'h5-additional-product' ); ?></label>
 		 <select class="wc-product-search" multiple="multiple" style="width: 50%;" id="related_ids" name="related_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'woocommerce' ); ?>" data-action="woocommerce_json_search_products_and_variations" data-exclude="<?php echo intval( $post->ID ); ?>">
 		  <?php
 			//check if there are values recorded to the database
@@ -124,7 +124,7 @@ class high5_Additional_Product_Admin {
 			}
 			
 		  ?>
-		</select> <?php echo wc_help_tip( __( 'Search for a product', 'h5-additional-product' ) ); ?>
+		</select> <?php esc_html_e(wc_help_tip( __( 'Search for a product', 'h5-additional-product' ) )); ?>
 	  </p><?php
 	}
 
@@ -153,17 +153,17 @@ class high5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function high5_checkbox_price_product() {
+	public function high5_checkbox_price_product() { ?>
 
-		echo '<div class="options_group">'; 
-		woocommerce_wp_checkbox( array(
+		<div class="options_group">
+		<?php woocommerce_wp_checkbox( array(
 			'id'          => '_high5_checkbox_price_product',
 			'value'       => get_post_meta( get_the_ID(), '_high5_checkbox_price_product' )[0],
 			'label'       => __( 'Show price', 'h5-additional-product' ),
 			'description' => __( 'Show product price after additional product name', 'h5-additional-product' ),
-		) );
-		echo '</div>';
-	}
+		) ); ?>
+		</div>
+	<?php }
 
 	/**
 	 * Save fields
