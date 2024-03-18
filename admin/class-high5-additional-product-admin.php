@@ -124,7 +124,7 @@ class high5_Additional_Product_Admin {
 			}
 			
 		  ?>
-		</select> <?php esc_html_e(wc_help_tip( __( 'Search for a product', 'h5-additional-product' ) )); ?>
+		</select> <?php echo wp_kses_post(wc_help_tip( __( 'Search for a product', 'h5-additional-product' ) )); ?>
 	  </p><?php
 	}
 
