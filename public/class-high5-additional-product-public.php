@@ -77,14 +77,14 @@ class high5_Additional_Product_Public {
 	 * @since    1.0.0
 	 */
 
-	public function high5_display_additional_product_to_cart(){
+	public function high5_display_additional_product_to_cart($nonce){
     
 		if(is_product()){    
 		global $product;
 
 		$additional_products = get_post_meta( $product->get_id(), 'related_ids', false )[0];
 		$presentation_products = get_post_meta( $product->get_id(), 'high5_additional_product_presentation_field', false )[0];
-		$checkbox_price_products = (get_post_meta( $product->get_id(), '_high5_checkbox_price_product', false )[0] == 'yes') ? true : false;
+		$checkbox_price_products = (get_post_meta( $product->get_id(), 'high5_checkbox_price_product', false )[0] == 'yes') ? true : false;
 
 		if(is_array($additional_products)){ ?>
 			<div class="high5_block_additionnal_product">
@@ -146,7 +146,7 @@ class high5_Additional_Product_Public {
 	 * @since    1.0.0
 	 */
 
-	public function high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data) {
+	public function high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data, $nonce) {
 
 		
 		$product = wc_get_product($variation);

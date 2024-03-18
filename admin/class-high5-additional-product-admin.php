@@ -63,15 +63,18 @@ class high5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function high5_additional_product_tab($tabs) {
-		$tabs['high5_additional_product_tab'] = array(
-			'label'     => __( 'Additional products', 'h5-additional-product' ), //Navigation Label Name
-			'target'    => 'high5_additional_product_content', //The HTML ID of the tab content wrapper
-			'class' => array( 'show_if_simple', 'show_if_variable' ), //Show if the product type is simple
-			'priority' => 99,
-		);
-		 
-		return $tabs;
+	public function high5_additional_product_tab($tabs, $nonce) {
+		if(wp_verify_nonce($nonce, 'admin-tab')){
+			$tabs['high5_additional_product_tab'] = array(
+				'label'     => __( 'Additional products', 'h5-additional-product' ), //Navigation Label Name
+				'target'    => 'high5_additional_product_content', //The HTML ID of the tab content wrapper
+				'class' => array( 'show_if_simple', 'show_if_variable' ), //Show if the product type is simple
+				'priority' => 99,
+			);
+			 
+			return $tabs;
+		}
+		
 	}
 
 	/**
@@ -80,8 +83,8 @@ class high5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function high5_add_custom_additional_fields() { ?>
-		
+	public function high5_add_custom_additional_fields($nonce) { 
+		if(wp_verify_nonce($nonce, 'admin-fields')): ?>
 		<div id="high5_additional_product_content" class="panel woocommerce_options_panel">
 
 			<div class="presentation_field">
@@ -91,7 +94,8 @@ class high5_Additional_Product_Admin {
 			$this->high5_select_product_field(); 
 			$this->high5_checkbox_price_product(); ?>
 		</div>
-		<?php }
+		<?php endif;
+	}
 
 	/**
 	 * Select product field
@@ -155,10 +159,10 @@ class high5_Additional_Product_Admin {
 
 	public function high5_checkbox_price_product() { ?>
 
-		<div class="options_group">
+<div class="options_group">
 		<?php woocommerce_wp_checkbox( array(
-			'id'          => '_high5_checkbox_price_product',
-			'value'       => get_post_meta( get_the_ID(), '_high5_checkbox_price_product' )[0],
+			'id'          => 'high5_checkbox_price_product',
+			'value'       => get_post_meta( get_the_ID(), 'high5_checkbox_price_product',true ),
 			'label'       => __( 'Show price', 'h5-additional-product' ),
 			'description' => __( 'Show product price after additional product name', 'h5-additional-product' ),
 		) ); ?>
@@ -171,28 +175,32 @@ class high5_Additional_Product_Admin {
 	 * @since    1.0.0
 	 */
 
-	public function high5_additional_fields_save( $post_id ){
-	
-		// // Text Field présentation
-		if(isset($_POST['high5_additional_product_presentation_field'])){
-			$woocommerce_text_field = sanitize_text_field($_POST['high5_additional_product_presentation_field']);
-			if( !empty( $woocommerce_text_field ) ){
-				update_post_meta( $post_id, 'high5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
+	public function high5_additional_fields_save( $post_id, $nonce ){
+		if(wp_verify_nonce($nonce, 'save-products'))
+		{
+			// // Text Field présentation
+			if(isset($_POST['high5_additional_product_presentation_field'])){
+				$woocommerce_text_field = sanitize_text_field($_POST['high5_additional_product_presentation_field']);
+				if( !empty( $woocommerce_text_field ) ){
+					update_post_meta( $post_id, 'high5_additional_product_presentation_field', esc_attr( $woocommerce_text_field ) );
+				}
+			}
+
+			// // Checkbox display price option
+			
+			$price_checkbox = isset( $_POST['high5_checkbox_price_product'] ) ? 'yes' : 'no';
+			update_post_meta( $post_id, 'high5_checkbox_price_product', $price_checkbox );
+			
+			
+				
+			// Product Field Type
+			if(isset($_POST['related_ids']) && is_array($_POST['related_ids'])){
+				$product_field_type = array_map( 'absint', (array) $_POST['related_ids'] ) ;
+				update_post_meta( $post_id, 'related_ids', $product_field_type );
 			}
 		}
-
-		// // Checkbox display price option
-		if(isset($_POST['_high5_checkbox_price_product']))	{
-			$price_checkbox = isset( $_POST['_high5_checkbox_price_product'] ) ? 'yes' : 'no';
-			update_post_meta( $post_id, '_high5_checkbox_price_product', $price_checkbox );
-		}
+	
 		
-			
-		// Product Field Type
-		if(isset($_POST['related_ids']) && is_array($_POST['related_ids'])){
-			$product_field_type = array_map( 'absint', (array) $_POST['related_ids'] ) ;
-			update_post_meta( $post_id, 'related_ids', $product_field_type );
-		}
 		
 	}
 	

@@ -94,7 +94,8 @@ run_high5_additional_product();
 function high5_additional_product_admin_tab($tabs){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
     $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
-	$tabs = $high5_APA->high5_additional_product_tab($tabs);
+	$nonce = wp_create_nonce('admin-tab');
+	$tabs = $high5_APA->high5_additional_product_tab($tabs, $nonce);
     return $tabs;
 }
 
@@ -108,8 +109,9 @@ add_filter( 'woocommerce_product_data_tabs', 'high5_additional_product_admin_tab
 
 function high5_additional_product_admin_field(){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
+	$nonce = wp_create_nonce('admin-fields');
     $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
-	$high5_APA->high5_add_custom_additional_fields(); 
+	$high5_APA->high5_add_custom_additional_fields($nonce); 
 }
 add_action( 'woocommerce_product_data_panels', 'high5_additional_product_admin_field' );
 
@@ -121,11 +123,12 @@ add_action( 'woocommerce_product_data_panels', 'high5_additional_product_admin_f
 
 function high5_additional_product_admin_field_save($post_id){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
+	$nonce = wp_create_nonce('save-products');
     $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
-	return $high5_APA->high5_additional_fields_save($post_id);
+	return $high5_APA->high5_additional_fields_save($post_id, $nonce);
     
 }
-add_action( 'woocommerce_process_product_meta', 'high5_additional_product_admin_field_save' );
+add_action( 'woocommerce_process_product_meta', 'high5_additional_product_admin_field_save', 20,1 );
 
 
 /** FRONT
@@ -142,8 +145,9 @@ add_action( 'woocommerce_process_product_meta', 'high5_additional_product_admin_
 
 function high5_display_additional_product_to_cart_front(){
 	require_once plugin_dir_path( __FILE__ ) . 'public/class-high5-additional-product-public.php';
+	$nonce = wp_create_nonce('cart-front');
     $high5_APA = new high5_Additional_Product_Public($plugin_name, $version);
-	$high5_APA->high5_display_additional_product_to_cart(); 
+	$high5_APA->high5_display_additional_product_to_cart($nonce); 
 }
 add_action( 'woocommerce_before_add_to_cart_quantity', 'high5_display_additional_product_to_cart_front', 1000, 0);
 
@@ -156,8 +160,9 @@ add_action( 'woocommerce_before_add_to_cart_quantity', 'high5_display_additional
 function high5_additional_add_to_cart_action($product_key,$variation_id, $quantity, $variation, $cart_item_data) {
 
     require_once plugin_dir_path( __FILE__ ) . 'public/class-high5-additional-product-public.php';
+	$nonce = wp_create_nonce('add_to_cart');
     $high5_APA = new high5_Additional_Product_Public($plugin_name, $version);
-	$high5_APA->high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data); 
+	$high5_APA->high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data, $nonce); 
     
 }
 add_action('woocommerce_add_to_cart', 'high5_additional_add_to_cart_action', 10, 6 );
