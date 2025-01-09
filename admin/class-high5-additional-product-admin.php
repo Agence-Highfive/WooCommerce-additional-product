@@ -92,7 +92,9 @@ class high5_Additional_Product_Admin {
 			</div>
 			<?php 
 			$this->high5_select_product_field(); 
-			$this->high5_checkbox_price_product(); ?>
+			$this->high5_checkbox_price_product();
+			$this->high5_checkbox_display_thumb();
+			 ?>
 		</div>
 		<?php endif;
 	}
@@ -159,15 +161,27 @@ class high5_Additional_Product_Admin {
 
 	public function high5_checkbox_price_product() { ?>
 
-<div class="options_group">
-		<?php woocommerce_wp_checkbox( array(
-			'id'          => 'high5_checkbox_price_product',
-			'value'       => get_post_meta( get_the_ID(), 'high5_checkbox_price_product',true ),
-			'label'       => __( 'Show price', 'h5-additional-product' ),
-			'description' => __( 'Show product price after additional product name', 'h5-additional-product' ),
-		) ); ?>
+		<div class="options_group">
+			<?php woocommerce_wp_checkbox( array(
+				'id'          => 'high5_checkbox_price_product',
+				'value'       => get_post_meta( get_the_ID(), 'high5_checkbox_price_product',true ),
+				'label'       => __( 'Show price', 'h5-additional-product' ),
+				'description' => __( 'Show product price after additional product name', 'h5-additional-product' ),
+			) ); ?>
 		</div>
 	<?php }
+
+public function high5_checkbox_display_thumb() { ?>
+
+	<div class="options_group">
+		<?php woocommerce_wp_checkbox( array(
+			'id'          => 'high5_checkbox_display_thumb',
+			'value'       => get_post_meta( get_the_ID(), 'high5_checkbox_display_thumb',true ),
+			'label'       => __( 'Show the thumbnail', 'h5-additional-product' ),
+			'description' => __( 'Show the product thumbnail between the checkbox and the additional product name', 'h5-additional-product' ),
+		) ); ?>
+	</div>
+<?php }
 
 	/**
 	 * Save fields
@@ -187,9 +201,12 @@ class high5_Additional_Product_Admin {
 			}
 
 			// // Checkbox display price option
-			
 			$price_checkbox = isset( $_POST['high5_checkbox_price_product'] ) ? 'yes' : 'no';
 			update_post_meta( $post_id, 'high5_checkbox_price_product', $price_checkbox );
+
+			// // Checkbox display thumb option
+			$thumb_checkbox = isset( $_POST['high5_checkbox_display_thumb'] ) ? 'yes' : 'no';
+			update_post_meta( $post_id, 'high5_checkbox_display_thumb', $thumb_checkbox );
 			
 			
 				

@@ -16,7 +16,7 @@
  * Plugin Name:       h5 additional product to cart
  * Plugin URI:        https://www.highfive.fr
  * Description:       Add a simple or variable additionnal product to the cart for woocommerce
- * Version:           1.0.0
+ * Version:           1.0.4
  * Author:            Highfive
  * Author URI:        https://www.highfive.fr/
  * License:           GPL-2.0+
@@ -29,13 +29,16 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+if (!session_id()) {
+    session_start();
+}
 
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'high5_ADDITIONAL_PRODUCT_VERSION', '1.0.2' );
+define( 'high5_ADDITIONAL_PRODUCT_VERSION', '1.0.4' );
 
 /**
  * The code that runs during plugin activation.
@@ -82,7 +85,58 @@ function run_high5_additional_product() {
 }
 run_high5_additional_product();
 
+/**
+ * Debug Function to debug website in prod (Only if user -> adminstrator roles)
+ *
+ * @param [type] $datas
+ * @param string $title
+ * @return void
+ */
+function debug($datas, $title="Debug") {
+	if ($title == "") $title = "Debug";
+	
+	  echo '<pre style="background:black;color:white;text-align:left;padding:15px;">';
+		  print_r("<span style='color:orange;'>%s : </span>", strtoupper($title));
+		  var_dump($datas);
+	  echo '</pre>';
+	  echo "<br />";
+	
+  }
 
+  /**
+ * Change Added to cart message.
+ */
+function h5_add_to_cart_message_html( $message, $products ) {
+
+	$count = 0;
+	$titles = array();
+	//debug($_SESSION['added_products']);
+	foreach ( $products as $product_id => $qty ) {
+		$titles[] = ( $qty > 1 ? absint( $qty ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', 'woocommerce' ), strip_tags( get_the_title( $product_id ) ) );
+		$count += $qty;
+	}
+	if(array_key_exists('added_products', $_SESSION)){
+		foreach($_SESSION['added_products'] as $added_prod){
+			//debug(strip_tags( get_the_title( $added_prod ) ));
+			$titles[] .= sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in cart', 'woocommerce' ), strip_tags( get_the_title( $added_prod ) ) );
+			//sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', 'woocommerce' ), strip_tags( get_the_title( $added_prod ) ) );
+			$count += $qty;
+		}
+	}
+
+	$titles     = array_filter( $titles );
+	$added_text = sprintf( _n(
+		'%s '. esc_html__('has been added to your cart', 'h5-additional-product'), // Singular
+		'%s '. esc_html__('have been added to your cart', 'h5-additional-product'), // Plural
+		$count, // Number of products added
+		'woocommerce' // Textdomain
+	), wc_format_list_of_items( $titles ) );
+	$message    = sprintf( '<a href="%s" class="button wc-forward">%s</a> %s', esc_url( wc_get_page_permalink( 'cart' ) ), esc_html__( 'View cart', 'woocommerce' ), esc_html( $added_text ) );
+
+
+	return $message;
+}
+add_filter( 'wc_add_to_cart_message_html', 'h5_add_to_cart_message_html', 10, 2 );
 
 
 /**
@@ -93,7 +147,9 @@ run_high5_additional_product();
 
 function high5_additional_product_admin_tab($tabs){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
-    $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
+	$plugin_name = "h5-additional-product";
+	$version = high5_ADDITIONAL_PRODUCT_VERSION;
+    $high5_APA = new high5_Additional_Product_Admin($plugin_name , $version);
 	$nonce = wp_create_nonce('admin-tab');
 	$tabs = $high5_APA->high5_additional_product_tab($tabs, $nonce);
     return $tabs;
@@ -110,6 +166,8 @@ add_filter( 'woocommerce_product_data_tabs', 'high5_additional_product_admin_tab
 function high5_additional_product_admin_field(){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
 	$nonce = wp_create_nonce('admin-fields');
+	$plugin_name = "h5-additional-product";
+	$version = high5_ADDITIONAL_PRODUCT_VERSION;
     $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
 	$high5_APA->high5_add_custom_additional_fields($nonce); 
 }
@@ -124,6 +182,8 @@ add_action( 'woocommerce_product_data_panels', 'high5_additional_product_admin_f
 function high5_additional_product_admin_field_save($post_id){
 	require_once plugin_dir_path( __FILE__ ) . 'admin/class-high5-additional-product-admin.php';
 	$nonce = wp_create_nonce('save-products');
+	$plugin_name = "h5-additional-product";
+	$version = high5_ADDITIONAL_PRODUCT_VERSION;
     $high5_APA = new high5_Additional_Product_Admin($plugin_name, $version);
 	return $high5_APA->high5_additional_fields_save($post_id, $nonce);
     
@@ -146,6 +206,8 @@ add_action( 'woocommerce_process_product_meta', 'high5_additional_product_admin_
 function high5_display_additional_product_to_cart_front(){
 	require_once plugin_dir_path( __FILE__ ) . 'public/class-high5-additional-product-public.php';
 	$nonce = wp_create_nonce('cart-front');
+	$plugin_name = "h5-additional-product";
+	$version = high5_ADDITIONAL_PRODUCT_VERSION;
     $high5_APA = new high5_Additional_Product_Public($plugin_name, $version);
 	$high5_APA->high5_display_additional_product_to_cart($nonce); 
 }
@@ -161,8 +223,12 @@ function high5_additional_add_to_cart_action($product_key,$variation_id, $quanti
 
     require_once plugin_dir_path( __FILE__ ) . 'public/class-high5-additional-product-public.php';
 	$nonce = wp_create_nonce('add_to_cart');
+	$plugin_name = "h5-additional-product";
+	$version = high5_ADDITIONAL_PRODUCT_VERSION;
     $high5_APA = new high5_Additional_Product_Public($plugin_name, $version);
 	$high5_APA->high5_additional_add_to_cart($product_key,$variation_id, $quantity, $variation, $cart_item_data, $nonce); 
     
 }
 add_action('woocommerce_add_to_cart', 'high5_additional_add_to_cart_action', 10, 6 );
+
+

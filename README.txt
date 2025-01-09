@@ -1,9 +1,9 @@
 === H5 Additional Product to Cart ===
 Contributors: ceccah5,fredhighfive
 Tags: woocommerce, e-commerce, product option, ecommerce, woocommerce product
-Requires at least: 5
-Tested up to: 6.4.2
-Stable tag: 1.0.2
+Requires at least: 5.8
+Tested up to: 6.7.1
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,7 +56,14 @@ There is no other option for the moment, but just leave us a message if you need
 
 == Changelog ==
 
-= 1.1 =
+= 1.0.4 =
+* Improvement: adding product image option for single product
+* Bug fix: Error when no product selected
+= 1.0.3 =
+* initialization issue
+= 1.0.2 =
+* translating corrections
+= 1.0.1 =
 * Sanitazing data and Escaping output
 = 1.0 =
 * First release of the plugin
